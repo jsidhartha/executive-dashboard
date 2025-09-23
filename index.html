@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConnX Executive Dashboard</title>
+
+  <!-- Chart.js CDN stays in HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- Sidebar navigation -->
+  <aside>
+    <div class="brand">
+      <div class="logo">CX</div>
+      <h1>ConnX Executive</h1>
+    </div>
+    <nav id="sideNav">
+      <a class="nav-item active" data-target="overview">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></span>
+        <strong>Overview</strong>
+      </a>
+      <a class="nav-item" data-target="sales">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17h2v-7H3v7zm4 0h2V7H7v10zm4 0h2v-4h-2v4zm4 0h2V4h-2v13zm4 0h2v-9h-2v9z"/></svg></span>
+        <strong>Sales</strong>
+      </a>
+      <a class="nav-item" data-target="cs">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7v2H3v7h6v-7H7V9a5 5 0 0110 0v2h-2v7h6v-7h-2V9a7 7 0 00-7-7z"/></svg></span>
+        <strong>Customer Success & Support</strong>
+      </a>
+      <a class="nav-item" data-target="finance">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm2-4h4V7H5v10zm6 0h4V3h-4v14zm6 0h4V11h-4v6z"/></svg></span>
+        <strong>Finance</strong>
+      </a>
+      <a class="nav-item" data-target="ops">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 100 8 4 4 0 000-8zm9 3h-2.09a6.978 6.978 0 00-1.2-2.9l1.48-1.48-1.42-1.42-1.48 1.48A6.978 6.978 0 0013 5.09V3h-2v2.09a6.978 6.978 0 00-2.9 1.2L6.62 4.81 5.2 6.23 6.68 7.7A6.978 6.978 0 005.48 10H3v2h2.09c.2 1.06.66 2.04 1.2 2.9l-1.48 1.48 1.42 1.42 1.48-1.48c.86.54 1.84 1 2.9 1.2V21h2v-2.09c1.06-.2 2.04-.66 2.9-1.2l1.48 1.48 1.42-1.42-1.48-1.48c.54-.86 1-1.84 1.2-2.9H21v-2z"/></svg></span>
+        <strong>Operations</strong>
+      </a>
+      <a class="nav-item" data-target="settings">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.953 7.953 0 000-1.88l2.03-1.58-2-3.46-2.39.96a8.06 8.06 0 00-1.62-.94L14.5 2h-5l-.66 3.04c-.57.23-1.11.54-1.62.94l-2.39-.96-2 3.46 2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94L2.83 14.4l2 3.46 2.39-.96c.5.4 1.05.72 1.62.94L9.5 22h5l.66-3.04c.57-.23 1.11-.54 1.62-.94l2.39.96 2-3.46-2.03-1.58zM12 15.5A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z"/></svg></span>
+        <strong>Settings</strong>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Top controls -->
+  <header>
+    <!-- ICON THEME SWITCHER (no text) -->
+    <button class="btn" id="themeIcon" title="Toggle theme" aria-label="Toggle theme">
+      <span class="icon" id="themeSvg"></span>
+    </button>
+    <select id="segmentSelect" title="Segment">
+      <option value="all">All Segments</option>
+      <option value="Enterprise">Enterprise</option>
+      <option value="Mid-Market">Mid-Market</option>
+      <option value="SMB">SMB</option>
+    </select>
+    <select id="periodSelect" title="Period">
+      <option value="QTD">Quarter-to-Date</option>
+      <option value="MTD">Month-to-Date</option>
+      <option value="LastQ">Last Quarter</option>
+    </select>
+    <span class="pill" id="lastRefresh">Last refresh: just now</span>
+  </header>
+
+  <!-- Main content -->
+  <main>
+    <!-- OVERVIEW SECTION -->
+    <section id="overview" class="section active">
+      <div class="grid kpis" id="kpiOverview"></div>
+      <div class="grid charts" style="margin-top: 10px;">
+        <div class="card"><h3>Pipeline Coverage (2Q)</h3><canvas id="ovPipeChart" height="220"></canvas></div>
+        <div class="card"><h3>Win Rate by Segment</h3><canvas id="ovWinChart" height="220"></canvas></div>
+        <div class="card"><h3>Partner-Sourced %</h3><canvas id="ovPartnerChart" height="220"></canvas></div>
+        <div class="card"><h3>Bookings Mix (Pie)</h3><canvas id="ovPie" height="220"></canvas></div>
+        <div class="card"><h3>Bookings by Segment (Bar)</h3><canvas id="ovBar" height="220"></canvas></div>
+        <div class="card"><h3>Discount Distribution (Donut)</h3><canvas id="ovDonut" height="220"></canvas></div>
+        <div class="card"><h3>Cycle Days (Polar)</h3><canvas id="ovPolar" height="220"></canvas></div>
+        <div class="card"><h3>Deal Size (Radar)</h3><canvas id="ovRadar" height="220"></canvas></div>
+        <div class="card"><h3>Forecast vs Actual (Area)</h3><canvas id="ovArea" height="220"></canvas></div>
+      </div>
+      <br />
+      <div class="table-wrap" id="ovTableWrap"></div>
+    </section>
+
+    <!-- SALES SECTION -->
+    <section id="sales" class="section">
+      <div class="grid kpis" id="kpiSales"></div>
+      <div class="grid charts" style="margin-top: 10px;">
+        <div class="card"><h3>Bookings Trend ($M)</h3><canvas id="bookingsChart" height="220"></canvas></div>
+        <div class="card"><h3>Forecast vs Actual</h3><canvas id="forecastChart" height="220"></canvas></div>
+        <div class="card"><h3>Pipeline by Stage ($M)</h3><canvas id="stageChart" height="220"></canvas></div>
+        <div class="card"><h3>Segment Mix (Pie)</h3><canvas id="salesPie" height="220"></canvas></div>
+        <div class="card"><h3>Win Rate vs Discount</h3><canvas id="salesBar" height="220"></canvas></div>
+        <div class="card"><h3>Deal Size (Donut)</h3><canvas id="salesDonut" height="220"></canvas></div>
+        <div class="card"><h3>Cycle Days (Polar)</h3><canvas id="salesPolar" height="220"></canvas></div>
+        <div class="card"><h3>Partner-Sourced (Radar)</h3><canvas id="salesRadar" height="220"></canvas></div>
+        <div class="card"><h3>Coverage Trend (Area)</h3><canvas id="salesArea" height="220"></canvas></div>
+      </div>
+      <br />
+      <div class="table-wrap" id="salesTableWrap"></div>
+    </section>
+
+    <!-- CUSTOMER SUCCESS & SUPPORT SECTION -->
+    <section id="cs" class="section">
+      <div class="grid kpis" id="kpiCS"></div>
+      <div class="grid charts" style="margin-top: 10px;">
+        <div class="card"><h3>CSAT (30d)</h3><canvas id="csCsatChart" height="220"></canvas></div>
+        <div class="card"><h3>NPS (90d)</h3><canvas id="csNpsChart" height="220"></canvas></div>
+        <div class="card"><h3>First Contact Resolution %</h3><canvas id="csFcrChart" height="220"></canvas></div>
+        <div class="card"><h3>Ticket Mix (Pie)</h3><canvas id="csPie" height="220"></canvas></div>
+        <div class="card"><h3>Backlog by Priority (Bar)</h3><canvas id="csBar" height="220"></canvas></div>
+        <div class="card"><h3>Vendor SLA (Donut)</h3><canvas id="csDonut" height="220"></canvas></div>
+        <div class="card"><h3>Ack Time (Polar)</h3><canvas id="csPolar" height="220"></canvas></div>
+        <div class="card"><h3>Escalations (Radar)</h3><canvas id="csRadar" height="220"></canvas></div>
+        <div class="card"><h3>CSAT vs NPS (Area)</h3><canvas id="csArea" height="220"></canvas></div>
+      </div>
+      <br />
+      <div class="table-wrap" id="csTableWrap"></div>
+    </section>
+
+    <!-- FINANCE SECTION -->
+    <section id="finance" class="section">
+      <div class="grid kpis" id="kpiFin"></div>
+      <div class="grid charts" style="margin-top: 10px;">
+        <div class="card"><h3>DSO (Days)</h3><canvas id="finDsoChart" height="220"></canvas></div>
+        <div class="card"><h3>Billing Accuracy %</h3><canvas id="finBillChart" height="220"></canvas></div>
+        <div class="card"><h3>Forecast Accuracy %</h3><canvas id="finFcstAccChart" height="220"></canvas></div>
+        <div class="card"><h3>Revenue Mix (Pie)</h3><canvas id="finPie" height="220"></canvas></div>
+        <div class="card"><h3>COGS by Category (Bar)</h3><canvas id="finBar" height="220"></canvas></div>
+        <div class="card"><h3>Margin Split (Donut)</h3><canvas id="finDonut" height="220"></canvas></div>
+        <div class="card"><h3>Cash Burn (Polar)</h3><canvas id="finPolar" height="220"></canvas></div>
+        <div class="card"><h3>OpEx vs Rev (Radar)</h3><canvas id="finRadar" height="220"></canvas></div>
+        <div class="card"><h3>AR Aging (Area)</h3><canvas id="finArea" height="220"></canvas></div>
+      </div>
+      <br />
+      <div class="table-wrap" id="finTableWrap"></div>
+    </section>
+
+    <!-- OPERATIONS SECTION -->
+    <section id="ops" class="section">
+      <div class="grid kpis" id="kpiOps"></div>
+      <div class="grid charts" style="margin-top: 10px;">
+        <div class="card"><h3>MTTR by Priority (hrs)</h3><canvas id="opsMttrChart" height="220"></canvas></div>
+        <div class="card"><h3>SLA Adherence %</h3><canvas id="opsSlaChart" height="220"></canvas></div>
+        <div class="card"><h3>Automation Takeover %</h3><canvas id="opsAutoChart" height="220"></canvas></div>
+        <div class="card"><h3>Incident Mix (Pie)</h3><canvas id="opsPie" height="220"></canvas></div>
+        <div class="card"><h3>Alerts by Source (Bar)</h3><canvas id="opsBar" height="220"></canvas></div>
+        <div class="card"><h3>Change Fail Rate (Donut)</h3><canvas id="opsDonut" height="220"></canvas></div>
+        <div class="card"><h3>Ack Time (Polar)</h3><canvas id="opsPolar" height="220"></canvas></div>
+        <div class="card"><h3>Ticket Types (Radar)</h3><canvas id="opsRadar" height="220"></canvas></div>
+        <div class="card"><h3>Availability (Area)</h3><canvas id="opsArea" height="220"></canvas></div>
+      </div>
+      <br />
+      <div class="table-wrap" id="opsTableWrap"></div>
+    </section>
+
+    <!-- SETTINGS SECTION -->
+    <section id="settings" class="section">
+      <div class="card">
+        <h3>Preferences</h3>
+        <p class="kpi-sub">Theme follows your system automatically. Use the icon in the header if you’d like to override temporarily.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- External script -->
+  <script src="./script/app.js"></script>
+</body>
+</html>
