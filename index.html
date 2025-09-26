@@ -3,171 +3,231 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ConnX Executive Dashboard</title>
+  <title>ConnX Executive Overview – KPIs + Risks with Embedded Charts</title>
 
-  <!-- Chart.js CDN stays in HTML -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- TailwindCSS + Alpine + Chart.js (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  <!-- External stylesheet -->
-  <link rel="stylesheet" href="./css/styles.css" />
+  <style>
+    .card{transition:box-shadow .2s ease,transform .2s ease}
+    .card:hover{box-shadow:0 10px 25px rgba(0,0,0,.08);transform:translateY(-1px)}
+    .tooltip{display:none}
+    .has-tip:hover .tooltip{display:block}
+  </style>
 </head>
-<body>
-  <!-- Sidebar navigation -->
-  <aside>
-    <div class="brand">
-      <div class="logo">CX</div>
-      <h1>ConnX Executive</h1>
-    </div>
-    <nav id="sideNav">
-      <a class="nav-item active" data-target="overview">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></span>
-        <strong>Overview</strong>
-      </a>
-      <a class="nav-item" data-target="sales">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17h2v-7H3v7zm4 0h2V7H7v10zm4 0h2v-4h-2v4zm4 0h2V4h-2v13zm4 0h2v-9h-2v9z"/></svg></span>
-        <strong>Sales</strong>
-      </a>
-      <a class="nav-item" data-target="cs">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7v2H3v7h6v-7H7V9a5 5 0 0110 0v2h-2v7h6v-7h-2V9a7 7 0 00-7-7z"/></svg></span>
-        <strong>Customer Success & Support</strong>
-      </a>
-      <a class="nav-item" data-target="finance">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm2-4h4V7H5v10zm6 0h4V3h-4v14zm6 0h4V11h-4v6z"/></svg></span>
-        <strong>Finance</strong>
-      </a>
-      <a class="nav-item" data-target="ops">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 100 8 4 4 0 000-8zm9 3h-2.09a6.978 6.978 0 00-1.2-2.9l1.48-1.48-1.42-1.42-1.48 1.48A6.978 6.978 0 0013 5.09V3h-2v2.09a6.978 6.978 0 00-2.9 1.2L6.62 4.81 5.2 6.23 6.68 7.7A6.978 6.978 0 005.48 10H3v2h2.09c.2 1.06.66 2.04 1.2 2.9l-1.48 1.48 1.42 1.42 1.48-1.48c.86.54 1.84 1 2.9 1.2V21h2v-2.09c1.06-.2 2.04-.66 2.9-1.2l1.48 1.48 1.42-1.42-1.48-1.48c.54-.86 1-1.84 1.2-2.9H21v-2z"/></svg></span>
-        <strong>Operations</strong>
-      </a>
-      <a class="nav-item" data-target="settings">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.953 7.953 0 000-1.88l2.03-1.58-2-3.46-2.39.96a8.06 8.06 0 00-1.62-.94L14.5 2h-5l-.66 3.04c-.57.23-1.11.54-1.62.94l-2.39-.96-2 3.46 2.03 1.58c-.05.31-.08.63-.08.94s.03.63.08.94L2.83 14.4l2 3.46 2.39-.96c.5.4 1.05.72 1.62.94L9.5 22h5l.66-3.04c.57-.23 1.11-.54 1.62-.94l2.39.96 2-3.46-2.03-1.58zM12 15.5A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z"/></svg></span>
-        <strong>Settings</strong>
-      </a>
-    </nav>
-  </aside>
+<body class="bg-neutral-50 text-neutral-900">
 
-  <!-- Top controls -->
-  <header>
-    <!-- ICON THEME SWITCHER (no text) -->
-    <button class="btn" id="themeIcon" title="Toggle theme" aria-label="Toggle theme">
-      <span class="icon" id="themeSvg"></span>
-    </button>
-    <select id="segmentSelect" title="Segment">
-      <option value="all">All Segments</option>
-      <option value="Enterprise">Enterprise</option>
-      <option value="Mid-Market">Mid-Market</option>
-      <option value="SMB">SMB</option>
-    </select>
-    <select id="periodSelect" title="Period">
-      <option value="QTD">Quarter-to-Date</option>
-      <option value="MTD">Month-to-Date</option>
-      <option value="LastQ">Last Quarter</option>
-    </select>
-    <span class="pill" id="lastRefresh">Last refresh: just now</span>
-  </header>
+  <!-- Data (no fetch needed) -->
+  <script type="application/json" id="overview-data">{
+    "lastRefreshed": "2025-09-26 16:17",
+    "persona": "CEO View",
+    "personaOptions": ["CEO View","COO View","CFO View","CTO View"],
+    "range": "Last 30 days",
+    "rangeOptions": ["Last 7 days","Last 30 days","Quarter to date"],
+    "kpis": [
+      {"key":"dso","title":"DSO (days)","value":68,"target":"<60","trend":"down","change":-4,"domain":"Finance","risk":"yellow"},
+      {"key":"onTime","title":"On-Time Delivery","value":"82%","target":"≥85%","trend":"down","change":-3,"domain":"PMO","risk":"yellow"},
+      {"key":"mttr","title":"MTTR (P1/P2)","value":"3.2h","target":"≤4h","trend":"up","change":-0.8,"domain":"Ops","risk":"green"},
+      {"key":"sla","title":"SLA Adherence","value":"97%","target":"≥95%","trend":"up","change":1.5,"domain":"Ops","risk":"green"},
+      {"key":"csat","title":"CSAT (30d)","value":"82%","target":"≥85%","trend":"down","change":-6,"domain":"CX","risk":"red"},
+      {"key":"nps","title":"NPS (90d)","value":45,"target":"≥40","trend":"down","change":-10,"domain":"CX","risk":"yellow"},
+      {"key":"winRate","title":"Win Rate","value":"30%","target":"≥35%","trend":"down","change":-5,"domain":"Sales","risk":"yellow"},
+      {"key":"discount","title":"Avg Discount","value":"18%","target":"<15%","trend":"up","change":3,"domain":"Sales","risk":"yellow"},
+      {"key":"budgetVar","title":"Budget Variance","value":"+6%","target":"±10%","trend":"up","change":2,"domain":"PMO","risk":"yellow"},
+      {"key":"pipeline","title":"Pipeline Coverage (2Q)","value":"2.4×","target":"≥3×","trend":"down","change":-0.3,"domain":"Sales","risk":"yellow"}
+    ],
+    "risks":[
+      {"severity":"red","label":"CSAT < 80%","detail":"Customer satisfaction dropped to 72% in the past 7 days.","owner":"COO","action":"Initiate CX taskforce; consider service credits"},
+      {"severity":"yellow","label":"DSO > 60 days","detail":"Collections aging trending up; 4 key accounts over 75 days.","owner":"CFO","action":"Launch AR Tiger Team; enforce terms"},
+      {"severity":"yellow","label":"On-Time Delivery < 85%","detail":"Delivery slippage in 2 workstreams; blockers pending for 9 days.","owner":"PMO","action":"Escalate blockers; replan milestones"}
+    ],
+    "charts": {
+      "bar": {"title":"Incidents Resolved by Severity (Last 30d)","desc":"Incidents resolved grouped by severity.","labels":["P1","P2","P3","P4"],"data":[18,62,140,220]},
+      "pie": {"title":"SLA Breaches by Region","desc":"Distribution of SLA breaches across regions.","labels":["AMER","EMEA","APAC"],"data":[12,8,5]},
+      "doughnut": {"title":"KPI Risk Mix","desc":"Proportion of KPIs that are On Target, Watchlist or At Risk.","labels":["On Target","Watchlist","At Risk"],"data":[4,5,1]},
+      "groupedAssignee":{"title":"Issues by Assignee and Status","desc":"Open vs closed issues grouped by assignee.","labels":["NAME 1","NAME 2","NAME 3","NAME 4","NAME 5","NAME 6"],"open":[3,5,2,6,3,4],"closed":[7,4,6,3,6,5]},
+      "donutIssueStatus":{"title":"Issue Status Mix","desc":"Breakdown of all issues by status.","labels":["Closed","In progress","Under Review","Open","Postponed","Technical Review"],"data":[33,28,7,17,7,4]},
+      "lineCreatedClosed":{"title":"Created vs Closed Issues (YTD)","desc":"Monthly created vs closed issues.","labels":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"closed":[42,38,55,60,64,58,70,66,72,0,0,0],"open":[35,40,48,52,58,63,61,68,75,0,0,0]},
+      "stackedPriority":{"title":"Incomplete Issues by Priority","desc":"Open issues by priority and project.","labels":["Title 01","Title 02","Title 03","Title 04","Title 05"],"critical":[13,12,9,11,14],"high":[10,13,12,9,8],"medium":[7,9,11,10,12]}
+    }
+  }</script>
 
-  <!-- Main content -->
-  <main>
-    <!-- OVERVIEW SECTION -->
-    <section id="overview" class="section active">
-      <div class="grid kpis" id="kpiOverview"></div>
-      <div class="grid charts" style="margin-top: 10px;">
-        <div class="card"><h3>Pipeline Coverage (2Q)</h3><canvas id="ovPipeChart" height="220"></canvas></div>
-        <div class="card"><h3>Win Rate by Segment</h3><canvas id="ovWinChart" height="220"></canvas></div>
-        <div class="card"><h3>Partner-Sourced %</h3><canvas id="ovPartnerChart" height="220"></canvas></div>
-        <div class="card"><h3>Bookings Mix (Pie)</h3><canvas id="ovPie" height="220"></canvas></div>
-        <div class="card"><h3>Bookings by Segment (Bar)</h3><canvas id="ovBar" height="220"></canvas></div>
-        <div class="card"><h3>Discount Distribution (Donut)</h3><canvas id="ovDonut" height="220"></canvas></div>
-        <div class="card"><h3>Cycle Days (Polar)</h3><canvas id="ovPolar" height="220"></canvas></div>
-        <div class="card"><h3>Deal Size (Radar)</h3><canvas id="ovRadar" height="220"></canvas></div>
-        <div class="card"><h3>Forecast vs Actual (Area)</h3><canvas id="ovArea" height="220"></canvas></div>
+  <div class="mx-auto max-w-7xl p-6" x-data="execPage()" x-init="init()">
+    <!-- Header -->
+    <header class="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold">ConnX Executive Overview</h1>
+        <p class="text-sm text-neutral-600">Unified view of Sales, Delivery, Operations & Finance</p>
       </div>
-      <br />
-      <div class="table-wrap" id="ovTableWrap"></div>
-    </section>
-
-    <!-- SALES SECTION -->
-    <section id="sales" class="section">
-      <div class="grid kpis" id="kpiSales"></div>
-      <div class="grid charts" style="margin-top: 10px;">
-        <div class="card"><h3>Bookings Trend ($M)</h3><canvas id="bookingsChart" height="220"></canvas></div>
-        <div class="card"><h3>Forecast vs Actual</h3><canvas id="forecastChart" height="220"></canvas></div>
-        <div class="card"><h3>Pipeline by Stage ($M)</h3><canvas id="stageChart" height="220"></canvas></div>
-        <div class="card"><h3>Segment Mix (Pie)</h3><canvas id="salesPie" height="220"></canvas></div>
-        <div class="card"><h3>Win Rate vs Discount</h3><canvas id="salesBar" height="220"></canvas></div>
-        <div class="card"><h3>Deal Size (Donut)</h3><canvas id="salesDonut" height="220"></canvas></div>
-        <div class="card"><h3>Cycle Days (Polar)</h3><canvas id="salesPolar" height="220"></canvas></div>
-        <div class="card"><h3>Partner-Sourced (Radar)</h3><canvas id="salesRadar" height="220"></canvas></div>
-        <div class="card"><h3>Coverage Trend (Area)</h3><canvas id="salesArea" height="220"></canvas></div>
+      <div class="flex items-center gap-3">
+        <select class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm" x-model="persona">
+          <template x-for="p in personaOptions" :key="p"><option x-text="p"></option></template>
+        </select>
+        <select class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm" x-model="range">
+          <template x-for="r in rangeOptions" :key="r"><option x-text="r"></option></template>
+        </select>
       </div>
-      <br />
-      <div class="table-wrap" id="salesTableWrap"></div>
-    </section>
+    </header>
 
-    <!-- CUSTOMER SUCCESS & SUPPORT SECTION -->
-    <section id="cs" class="section">
-      <div class="grid kpis" id="kpiCS"></div>
-      <div class="grid charts" style="margin-top: 10px;">
-        <div class="card"><h3>CSAT (30d)</h3><canvas id="csCsatChart" height="220"></canvas></div>
-        <div class="card"><h3>NPS (90d)</h3><canvas id="csNpsChart" height="220"></canvas></div>
-        <div class="card"><h3>First Contact Resolution %</h3><canvas id="csFcrChart" height="220"></canvas></div>
-        <div class="card"><h3>Ticket Mix (Pie)</h3><canvas id="csPie" height="220"></canvas></div>
-        <div class="card"><h3>Backlog by Priority (Bar)</h3><canvas id="csBar" height="220"></canvas></div>
-        <div class="card"><h3>Vendor SLA (Donut)</h3><canvas id="csDonut" height="220"></canvas></div>
-        <div class="card"><h3>Ack Time (Polar)</h3><canvas id="csPolar" height="220"></canvas></div>
-        <div class="card"><h3>Escalations (Radar)</h3><canvas id="csRadar" height="220"></canvas></div>
-        <div class="card"><h3>CSAT vs NPS (Area)</h3><canvas id="csArea" height="220"></canvas></div>
+    <!-- Company KPIs -->
+    <section>
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-xl font-semibold">Company KPIs</h2>
+        <p class="text-xs text-neutral-500">
+          Refreshed: <span x-text="lastRefreshed"></span> • Data accuracy ±1% • RBAC: <span x-text="persona"></span>
+        </p>
       </div>
-      <br />
-      <div class="table-wrap" id="csTableWrap"></div>
-    </section>
 
-    <!-- FINANCE SECTION -->
-    <section id="finance" class="section">
-      <div class="grid kpis" id="kpiFin"></div>
-      <div class="grid charts" style="margin-top: 10px;">
-        <div class="card"><h3>DSO (Days)</h3><canvas id="finDsoChart" height="220"></canvas></div>
-        <div class="card"><h3>Billing Accuracy %</h3><canvas id="finBillChart" height="220"></canvas></div>
-        <div class="card"><h3>Forecast Accuracy %</h3><canvas id="finFcstAccChart" height="220"></canvas></div>
-        <div class="card"><h3>Revenue Mix (Pie)</h3><canvas id="finPie" height="220"></canvas></div>
-        <div class="card"><h3>COGS by Category (Bar)</h3><canvas id="finBar" height="220"></canvas></div>
-        <div class="card"><h3>Margin Split (Donut)</h3><canvas id="finDonut" height="220"></canvas></div>
-        <div class="card"><h3>Cash Burn (Polar)</h3><canvas id="finPolar" height="220"></canvas></div>
-        <div class="card"><h3>OpEx vs Rev (Radar)</h3><canvas id="finRadar" height="220"></canvas></div>
-        <div class="card"><h3>AR Aging (Area)</h3><canvas id="finArea" height="220"></canvas></div>
+      <!-- KPI tiles -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <template x-for="item in kpis" :key="item.key">
+          <div class="card rounded-2xl border p-4" :class="riskColors[item.risk]">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs opacity-75" x-text="item.domain"></p>
+                <h3 class="text-lg font-semibold" x-text="item.title"></h3>
+              </div>
+              <template x-if="item.risk === 'red'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </template>
+              <template x-if="item.risk !== 'red'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+              </template>
+            </div>
+            <div class="mt-3 flex items-end gap-3">
+              <span class="text-3xl font-bold leading-none" x-text="item.value"></span>
+              <span class="text-sm opacity-75">Target <span x-text="item.target"></span></span>
+            </div>
+            <div class="mt-3 flex items-center gap-2 text-sm">
+              <template x-if="item.trend === 'up'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+              </template>
+              <template x-if="item.trend !== 'up'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7l-6 6-4-4-8 8"/><path d="M10 17H3v-7"/></svg>
+              </template>
+              <span class="font-medium" x-text="signed(item.change)"></span>
+              <span class="opacity-70">vs prior period</span>
+            </div>
+          </div>
+        </template>
       </div>
-      <br />
-      <div class="table-wrap" id="finTableWrap"></div>
-    </section>
 
-    <!-- OPERATIONS SECTION -->
-    <section id="ops" class="section">
-      <div class="grid kpis" id="kpiOps"></div>
-      <div class="grid charts" style="margin-top: 10px;">
-        <div class="card"><h3>MTTR by Priority (hrs)</h3><canvas id="opsMttrChart" height="220"></canvas></div>
-        <div class="card"><h3>SLA Adherence %</h3><canvas id="opsSlaChart" height="220"></canvas></div>
-        <div class="card"><h3>Automation Takeover %</h3><canvas id="opsAutoChart" height="220"></canvas></div>
-        <div class="card"><h3>Incident Mix (Pie)</h3><canvas id="opsPie" height="220"></canvas></div>
-        <div class="card"><h3>Alerts by Source (Bar)</h3><canvas id="opsBar" height="220"></canvas></div>
-        <div class="card"><h3>Change Fail Rate (Donut)</h3><canvas id="opsDonut" height="220"></canvas></div>
-        <div class="card"><h3>Ack Time (Polar)</h3><canvas id="opsPolar" height="220"></canvas></div>
-        <div class="card"><h3>Ticket Types (Radar)</h3><canvas id="opsRadar" height="220"></canvas></div>
-        <div class="card"><h3>Availability (Area)</h3><canvas id="opsArea" height="220"></canvas></div>
-      </div>
-      <br />
-      <div class="table-wrap" id="opsTableWrap"></div>
-    </section>
-
-    <!-- SETTINGS SECTION -->
-    <section id="settings" class="section">
-      <div class="card">
-        <h3>Preferences</h3>
-        <p class="kpi-sub">Theme follows your system automatically. Use the icon in the header if you’d like to override temporarily.</p>
+      <!-- Charts nested in Company KPIs -->
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+        <template x-for="(cfg,id) in {bar:charts.bar,pie:charts.pie,doughnut:charts.doughnut,groupedAssignee:charts.groupedAssignee}" :key="id">
+          <div class="card rounded-2xl border bg-white p-4 flex flex-col">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-medium" x-text="cfg.title"></h3>
+              <div class="relative has-tip">
+                <svg class="h-4 w-4 text-neutral-400 hover:text-neutral-600 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+                <div class="tooltip absolute bottom-full right-0 mb-2 w-56 rounded-md bg-gray-800 p-2 text-xs text-white" x-text="cfg.desc"></div>
+              </div>
+            </div>
+            <div class="min-h-56 relative">
+              <canvas :id="id+'Chart'" class="absolute inset-0"></canvas>
+            </div>
+          </div>
+        </template>
       </div>
     </section>
-  </main>
 
-  <!-- External script -->
-  <script src="./script/app.js"></script>
+    <!-- Risk Flags & Action Triggers -->
+    <section class="mt-10">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-xl font-semibold">Risk Flags & Action Triggers</h2>
+        <a href="#" class="text-xs text-neutral-500 underline">View Playbook</a>
+      </div>
+
+      <!-- Risk table -->
+      <div class="rounded-2xl border bg-white">
+        <div class="grid grid-cols-12 gap-4 border-b px-4 py-3 text-xs font-semibold text-neutral-500">
+          <div class="col-span-3">Flag</div>
+          <div class="col-span-5">Detail</div>
+          <div class="col-span-2">Owner</div>
+          <div class="col-span-2">Action</div>
+        </div>
+        <template x-for="r in risks" :key="r.label">
+          <div class="grid grid-cols-12 gap-4 items-start px-4 py-3 border-b last:border-0">
+            <div class="col-span-3 flex items-center gap-2">
+              <span :class="{'bg-rose-500':'red'===r.severity,'bg-amber-500':'yellow'===r.severity,'bg-emerald-500':'green'===r.severity}" class="inline-block h-2 w-2 rounded-full"></span>
+              <span class="font-medium" x-text="r.label"></span>
+            </div>
+            <div class="col-span-5 text-sm text-neutral-700" x-text="r.detail"></div>
+            <div class="col-span-2 text-sm font-medium" x-text="r.owner"></div>
+            <div class="col-span-2 text-sm text-neutral-700">
+              <div class="relative has-tip inline-flex items-center gap-2">
+                <span x-text="r.action"></span>
+                <svg class="h-4 w-4 text-neutral-400 hover:text-neutral-600 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+                <div class="tooltip absolute bottom-full left-0 mb-2 w-64 rounded-md bg-gray-800 p-2 text-xs text-white">Action guidance and playbook link.</div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Charts nested in Risks -->
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+        <template x-for="(cfg,id) in {donutIssueStatus:charts.donutIssueStatus,lineCreatedClosed:charts.lineCreatedClosed,stackedPriority:charts.stackedPriority,groupedAssignee2:charts.groupedAssignee}" :key="id">
+          <div class="card rounded-2xl border bg-white p-4 flex flex-col">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-medium" x-text="(id==='groupedAssignee2') ? 'Issues by Assignee (All)' : cfg.title"></h3>
+              <div class="relative has-tip">
+                <svg class="h-4 w-4 text-neutral-400 hover:text-neutral-600 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+                <div class="tooltip absolute bottom-full right-0 mb-2 w-56 rounded-md bg-gray-800 p-2 text-xs text-white" x-text="cfg.desc || 'Distribution view'"></div>
+              </div>
+            </div>
+            <div class="min-h-56 relative">
+              <canvas :id="id+'Chart'" class="absolute inset-0"></canvas>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <footer class="mt-10 border-t pt-4 text-xs text-neutral-500">
+      <p>Static demo • Embedded data • Charts are contained within KPI and Risk sections</p>
+    </footer>
+  </div>
+
+  <script>
+    function execPage(){
+      return {
+        persona:'CEO View', range:'Last 30 days', lastRefreshed:'2025-09-26 16:17',
+        personaOptions:['CEO View','COO View','CFO View','CTO View'],
+        rangeOptions:['Last 7 days','Last 30 days','Quarter to date'],
+        kpis:[], risks:[], charts:{},
+        riskColors:{
+          green:'bg-emerald-50 text-emerald-800 border-emerald-200',
+          yellow:'bg-amber-50 text-amber-800 border-amber-200',
+          red:'bg-rose-50 text-rose-800 border-rose-200'
+        },
+        signed(n){return(n>0?'+':'')+n;},
+        init(){
+          const d = JSON.parse(document.getElementById('overview-data').textContent);
+          Object.assign(this,{kpis:d.kpis,risks:d.risks,charts:d.charts});
+          this.$nextTick(()=>this.renderCharts());
+        },
+        renderCharts(){
+          const palette={primary:'#0ea5e9', success:'#10b981', warning:'#f59e0b', danger:'#f43f5e', neutral:'#94a3b8', alt:'#38bdf8'};
+          const gridColor='rgba(148,163,184,0.2)';
+          const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:14,usePointStyle:true}},tooltip:{backgroundColor:'rgba(15,23,42,0.9)',titleColor:'#fff',bodyColor:'#fff',padding:12,cornerRadius:8}}};
+
+          // KPIs section charts
+          new Chart(document.getElementById('barChart'),{type:'bar',data:{labels:this.charts.bar.labels,datasets:[{label:'Resolved',data:this.charts.bar.data,borderRadius:8,backgroundColor:palette.primary}]},options:{...baseOpts,scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{precision:0}}}}});
+          new Chart(document.getElementById('pieChart'),{type:'pie',data:{labels:this.charts.pie.labels,datasets:[{data:this.charts.pie.data,borderWidth:1,borderColor:'#fff',backgroundColor:[palette.primary,palette.success,palette.warning]}]},options:{...baseOpts,plugins:{...baseOpts.plugins,legend:{position:'bottom'}}}});
+          new Chart(document.getElementById('doughnutChart'),{type:'doughnut',data:{labels:this.charts.doughnut.labels,datasets:[{data:this.charts.doughnut.data,borderWidth:1,borderColor:'#fff',backgroundColor:[palette.success,palette.warning,palette.danger]}]},options:{...baseOpts,cutout:'60%',plugins:{...baseOpts.plugins,legend:{position:'bottom'}}}});
+          new Chart(document.getElementById('groupedAssigneeChart'),{type:'bar',data:{labels:this.charts.groupedAssignee.labels,datasets:[{label:'Closed',data:this.charts.groupedAssignee.closed,backgroundColor:palette.success,borderRadius:8},{label:'Open',data:this.charts.groupedAssignee.open,backgroundColor:palette.danger,borderRadius:8}]},options:{...baseOpts,scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{beginAtZero:true,precision:0}}}}});
+
+          // Risks section charts
+          new Chart(document.getElementById('donutIssueStatusChart'),{type:'doughnut',data:{labels:this.charts.donutIssueStatus.labels,datasets:[{data:this.charts.donutIssueStatus.data,borderWidth:1,borderColor:'#fff',backgroundColor:[palette.neutral, palette.primary, palette.alt, palette.warning, '#eab308', palette.success]}]},options:{...baseOpts,cutout:'55%',plugins:{...baseOpts.plugins,legend:{position:'bottom'}}}});
+          new Chart(document.getElementById('lineCreatedClosedChart'),{type:'line',data:{labels:this.charts.lineCreatedClosed.labels,datasets:[{label:'Closed',data:this.charts.lineCreatedClosed.closed,borderColor:palette.success,backgroundColor:'transparent',tension:.35,pointRadius:3},{label:'Open',data:this.charts.lineCreatedClosed.open,borderColor:palette.danger,backgroundColor:'transparent',tension:.35,pointRadius:3}]},options:{...baseOpts,scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{precision:0}}}}});
+          new Chart(document.getElementById('stackedPriorityChart'),{type:'bar',data:{labels:this.charts.stackedPriority.labels,datasets:[{label:'Critical',data:this.charts.stackedPriority.critical,backgroundColor:palette.danger,borderRadius:6},{label:'High',data:this.charts.stackedPriority.high,backgroundColor:palette.warning,borderRadius:6},{label:'Medium',data:this.charts.stackedPriority.medium,backgroundColor:palette.primary,borderRadius:6}]},options:{...baseOpts,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:gridColor},ticks:{beginAtZero:true,precision:0}}}}});
+          new Chart(document.getElementById('groupedAssignee2Chart'),{type:'bar',data:{labels:this.charts.groupedAssignee.labels,datasets:[{label:'Closed',data:this.charts.groupedAssignee.closed,backgroundColor:palette.success,borderRadius:8},{label:'Open',data:this.charts.groupedAssignee.open,backgroundColor:palette.danger,borderRadius:8}]},options:{...baseOpts,scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{beginAtZero:true,precision:0}}}}});
+        }
+      }
+    }
+  </script>
 </body>
 </html>

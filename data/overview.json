@@ -1,0 +1,346 @@
+{
+  "lastRefreshed": "2025-09-26 17:27",
+  "persona": "CEO View",
+  "personaOptions": [
+    "CEO View",
+    "COO View",
+    "CFO View",
+    "CTO View"
+  ],
+  "range": "Last 30 days",
+  "rangeOptions": [
+    "Last 7 days",
+    "Last 30 days",
+    "Quarter to date"
+  ],
+  "kpis": [
+    {
+      "key": "dso",
+      "title": "DSO (days)",
+      "value": 68,
+      "target": "<60",
+      "trend": "down",
+      "change": -4,
+      "domain": "Finance",
+      "risk": "yellow"
+    },
+    {
+      "key": "onTime",
+      "title": "On-Time Delivery",
+      "value": "82%",
+      "target": "≥85%",
+      "trend": "down",
+      "change": -3,
+      "domain": "PMO",
+      "risk": "yellow"
+    },
+    {
+      "key": "mttr",
+      "title": "MTTR (P1/P2)",
+      "value": "3.2h",
+      "target": "≤4h",
+      "trend": "up",
+      "change": -0.8,
+      "domain": "Ops",
+      "risk": "green"
+    },
+    {
+      "key": "sla",
+      "title": "SLA Adherence",
+      "value": "97%",
+      "target": "≥95%",
+      "trend": "up",
+      "change": 1.5,
+      "domain": "Ops",
+      "risk": "green"
+    },
+    {
+      "key": "csat",
+      "title": "CSAT (30d)",
+      "value": "82%",
+      "target": "≥85%",
+      "trend": "down",
+      "change": -6,
+      "domain": "CX",
+      "risk": "red"
+    },
+    {
+      "key": "nps",
+      "title": "NPS (90d)",
+      "value": 45,
+      "target": "≥40",
+      "trend": "down",
+      "change": -10,
+      "domain": "CX",
+      "risk": "yellow"
+    },
+    {
+      "key": "winRate",
+      "title": "Win Rate",
+      "value": "30%",
+      "target": "≥35%",
+      "trend": "down",
+      "change": -5,
+      "domain": "Sales",
+      "risk": "yellow"
+    },
+    {
+      "key": "discount",
+      "title": "Avg Discount",
+      "value": "18%",
+      "target": "<15%",
+      "trend": "up",
+      "change": 3,
+      "domain": "Sales",
+      "risk": "yellow"
+    },
+    {
+      "key": "budgetVar",
+      "title": "Budget Variance",
+      "value": "+6%",
+      "target": "±10%",
+      "trend": "up",
+      "change": 2,
+      "domain": "PMO",
+      "risk": "yellow"
+    },
+    {
+      "key": "pipeline",
+      "title": "Pipeline Coverage (2Q)",
+      "value": "2.4×",
+      "target": "≥3×",
+      "trend": "down",
+      "change": -0.3,
+      "domain": "Sales",
+      "risk": "yellow"
+    }
+  ],
+  "risks": [
+    {
+      "severity": "red",
+      "label": "CSAT < 80%",
+      "detail": "Customer satisfaction dropped to 72% in the past 7 days.",
+      "owner": "COO",
+      "action": "Initiate CX taskforce; consider service credits"
+    },
+    {
+      "severity": "yellow",
+      "label": "DSO > 60 days",
+      "detail": "Collections aging trending up; 4 key accounts over 75 days.",
+      "owner": "CFO",
+      "action": "Launch AR Tiger Team; enforce terms"
+    },
+    {
+      "severity": "yellow",
+      "label": "On-Time Delivery < 85%",
+      "detail": "Delivery slippage in 2 workstreams; blockers pending for 9 days.",
+      "owner": "PMO",
+      "action": "Escalate blockers; replan milestones"
+    }
+  ],
+  "drilldowns": [
+    {
+      "title": "Sales Funnel & Pricing",
+      "desc": "Win rate, discounting, pipeline coverage",
+      "href": "#"
+    },
+    {
+      "title": "Delivery & PMO",
+      "desc": "On-time %, budget variance, blockers",
+      "href": "#"
+    },
+    {
+      "title": "Operations & CX",
+      "desc": "MTTR, SLA, CSAT, NPS",
+      "href": "#"
+    },
+    {
+      "title": "Finance & Cash",
+      "desc": "DSO, billing accuracy, cash variance",
+      "href": "#"
+    }
+  ],
+  "charts": {
+    "bar": {
+      "title": "Incidents Resolved by Severity (Last 30d)",
+      "labels": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "data": [
+        18,
+        62,
+        140,
+        220
+      ]
+    },
+    "pie": {
+      "title": "SLA Breaches by Region",
+      "labels": [
+        "AMER",
+        "EMEA",
+        "APAC"
+      ],
+      "data": [
+        12,
+        8,
+        5
+      ]
+    },
+    "doughnut": {
+      "title": "KPI Risk Mix",
+      "labels": [
+        "On Target",
+        "Watchlist",
+        "At Risk"
+      ],
+      "data": [
+        4,
+        5,
+        1
+      ]
+    },
+    "lineCreatedClosed": {
+      "title": "Created vs Closed Issues (YTD)",
+      "labels": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "closed": [
+        42,
+        38,
+        55,
+        60,
+        64,
+        58,
+        70,
+        66,
+        72,
+        0,
+        0,
+        0
+      ],
+      "open": [
+        35,
+        40,
+        48,
+        52,
+        58,
+        63,
+        61,
+        68,
+        75,
+        0,
+        0,
+        0
+      ]
+    },
+    "stackedPriority": {
+      "title": "Incomplete Issues by Priority & Project (Last 30d)",
+      "labels": [
+        "Title 01",
+        "Title 02",
+        "Title 03",
+        "Title 04",
+        "Title 05"
+      ],
+      "critical": [
+        13,
+        12,
+        9,
+        11,
+        14
+      ],
+      "high": [
+        10,
+        13,
+        12,
+        9,
+        8
+      ],
+      "medium": [
+        7,
+        9,
+        11,
+        10,
+        12
+      ]
+    },
+    "groupedAssignee": {
+      "title": "Issues by Assignee and Status",
+      "labels": [
+        "NAME 1",
+        "NAME 2",
+        "NAME 3",
+        "NAME 4",
+        "NAME 5",
+        "NAME 6"
+      ],
+      "open": [
+        3,
+        5,
+        2,
+        6,
+        3,
+        4
+      ],
+      "closed": [
+        7,
+        4,
+        6,
+        3,
+        6,
+        5
+      ]
+    },
+    "donutIssueStatus": {
+      "title": "Issue Status Mix",
+      "labels": [
+        "Closed",
+        "In progress",
+        "Under Review",
+        "Open",
+        "Postponed",
+        "Technical Review"
+      ],
+      "data": [
+        33,
+        28,
+        7,
+        17,
+        7,
+        4
+      ]
+    },
+    "gauges": [
+      {
+        "title": "Critical Status",
+        "value": 35
+      },
+      {
+        "title": "Schedule Late",
+        "value": 10
+      },
+      {
+        "title": "High Alignment",
+        "value": 85
+      },
+      {
+        "title": "High Risk",
+        "value": 25
+      }
+    ]
+  }
+}
