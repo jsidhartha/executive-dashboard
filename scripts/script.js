@@ -687,7 +687,7 @@ document.addEventListener("DOMContentLoaded", renderSecurityKPIs);
 const aiOpsKPIs = [
     {
         title: "SLA/Uptime Adherence (%)",
-        value: 99.9,
+        value: '99.9%',
         target: "≥ 99.9% core services",
         trend: "+0.1% monthly",
         direction: "up",
@@ -709,7 +709,7 @@ const aiOpsKPIs = [
     },
     {
         title: "Change Failure Rate",
-        value: 12,
+        value: '12%',
         target: "< 10%",
         trend: "+2% monthly",
         direction: "down",
@@ -911,7 +911,7 @@ document.addEventListener("DOMContentLoaded", renderIncidentKPIs);
 const financeKPIs = [
     {
         title: "Cash Flow Variance",
-        value: 4.5,
+        value: '4.5%',
         target: "< 5%",
         trend: "-0.3% monthly",
         type: "static",
@@ -921,7 +921,7 @@ const financeKPIs = [
     },
     {
         title: "Billing Accuracy",
-        value: 98,
+        value: '98%',
         target: "> 98%",
         trend: "-1% monthly",
         type: "static",
@@ -941,7 +941,7 @@ const financeKPIs = [
     },
     {
         title: "Budget Variance",
-        value: 6,
+        value: '6%',
         target: "< 10%",
         trend: "+2% monthly",
         type: "static",
@@ -951,7 +951,7 @@ const financeKPIs = [
     },
     {
         title: "Emergency Purchases",
-        value: 5,
+        value: '5%',
         target: "< 5%",
         trend: "0% monthly",
         type: "static",
@@ -1090,7 +1090,7 @@ const solutionsKPIs = [
     },
     {
         title: "Sales Cycle Length (days)",
-        value: 43,
+        value: '43d',
         target: "< 45 days",
         trend: "-2 days monthly",
         type: "static",
