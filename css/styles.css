@@ -1,5 +1,3 @@
-/* === Custom Dashboard Styling (Unified for All Sections) === */
-
 /* Section container */
 .dashboard-section {
   padding: 1.5rem; /* p-6 */
@@ -47,3 +45,4 @@
   opacity: 1;
   transform: translateY(4px);
 }
+
