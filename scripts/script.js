@@ -845,7 +845,7 @@ const incidentKPIs = [
     },
     {
         title: "Backlog Age / % Breaching SLA",
-        value: "Median 6d / Breach 3%",
+        value: "6d / 3%",
         target: "Median < 7d; Breach < 5%",
         trend: "-0.5d monthly",
         color: "green",
@@ -854,7 +854,7 @@ const incidentKPIs = [
     },
     {
         title: "Churn Rate (Logo/Revenue)",
-        value: "Logo 2.5% / Rev 0.9%",
+        value: "2.5% / 0.9%",
         target: "Logo ≤ 3%/qtr; Rev ≤ 1%/mo",
         trend: "Stable",
         color: "rose",
@@ -863,7 +863,7 @@ const incidentKPIs = [
     },
     {
         title: "Renewal Rate / NRR",
-        value: "Renewal 92% / NRR 112%",
+        value: "92% / 112%",
         target: "Renewal ≥ 90%; NRR ≥ 110%",
         trend: "+2% quarterly",
         color: "emerald",
