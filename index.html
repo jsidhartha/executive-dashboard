@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Executive Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body class="bg-gray-100 text-gray-800 p-6">
+
+    <div class="max-w-10xl mx-auto space-y-8">
+
+        <!-- === Solutions Consulting KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Solutions Consulting</h2>
+            <div id="solutionsContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === Finance KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Finance</h2>
+            <div id="financeContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === Incident & CSM KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Incident & CSM</h2>
+            <div id="incidentContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === AI Operations KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">AI Operations</h2>
+            <div id="aiContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === Security KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Security</h2>
+            <div id="securityContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === PMO (Project Management Office) KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">PMO (Project Management Office)</h2>
+            <div id="pmoContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === GRC (Governance, Risk & Compliance) KPI Row === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">GRC (Governance, Risk & Compliance)</h2>
+            <div id="grcContainer" class="card-grid"></div>
+        </section>
+
+        <!-- === HR (Human Resources) === -->
+        <section class="dashboard-section">
+            <h2 class="section-title">HR (Human Resources)</h2>
+            <div id="hrContainer" class="card-grid"></div>
+        </section>
+
+    </div>
+
+    <!-- Custom JS -->
+    <script src="scripts/script.js"></script>
+</body>
+
+</html>
