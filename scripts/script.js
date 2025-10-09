@@ -150,16 +150,6 @@ document.addEventListener("DOMContentLoaded", renderHRKPIs);
 // === GRC (Governance, Risk & Compliance) KPI Data ===
 const grcKPIs = [
     {
-        title: "Contract Review Cycle",
-        value: [26.5, 25.8, 27.3, 24.9, 23.1, 22.0],
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        target: "< 30 days",
-        type: "line",
-        color: "rose",
-        definition: "Calendar days from legal intake to approval/sign-ready.",
-        formula: "Cycle Time = Approval/Send-to-Client − Legal Intake (median preferred)"
-    },
-    {
         title: "Regulatory Audit Success",
         value: 86,
         target: "100%",
@@ -177,6 +167,16 @@ const grcKPIs = [
         color: "rose",
         definition: "Contracts entering formal dispute/arbitration.",
         formula: "Dispute% = (#Contracts in Dispute / #Active Contracts) × 100 (annualized)"
+    },
+    {
+        title: "Contract Review Cycle",
+        value: [26.5, 25.8, 27.3, 24.9, 23.1, 22.0],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        target: "< 30 days",
+        type: "line",
+        color: "rose",
+        definition: "Calendar days from legal intake to approval/sign-ready.",
+        formula: "Cycle Time = Approval/Send-to-Client − Legal Intake (median preferred)"
     },
     {
         title: "Supplier Risk Score",
@@ -910,14 +910,14 @@ document.addEventListener("DOMContentLoaded", renderIncidentKPIs);
 // === Finance KPI Data ===
 const financeKPIs = [
     {
-        title: "Days Sales Outstanding (DSO)",
-        value: [62, 58, 57, 55, 54, 53],
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        target: "< 60 days",
-        type: "bar",
-        color: "amber",
-        definition: "Average number of days to collect receivables.",
-        formula: "DSO = (Average A/R Balance / Credit Sales) × Period Days (monthly)"
+        title: "Cash Flow Variance",
+        value: 4.5,
+        target: "< 5%",
+        trend: "-0.3% monthly",
+        type: "static",
+        color: "emerald",
+        definition: "Deviation of actual cash flow from forecast.",
+        formula: "Variance% = (Actual − Forecast) / Forecast × 100"
     },
     {
         title: "Billing Accuracy",
@@ -930,14 +930,14 @@ const financeKPIs = [
         formula: "Accuracy% = (#Invoices w/o Error / #Total Invoices) × 100"
     },
     {
-        title: "Cash Flow Variance",
-        value: 4.5,
-        target: "< 5%",
-        trend: "-0.3% monthly",
-        type: "static",
-        color: "emerald",
-        definition: "Deviation of actual cash flow from forecast.",
-        formula: "Variance% = (Actual − Forecast) / Forecast × 100"
+        title: "Days Sales Outstanding (DSO)",
+        value: [62, 58, 57, 55, 54, 53],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        target: "< 60 days",
+        type: "bar",
+        color: "amber",
+        definition: "Average number of days to collect receivables.",
+        formula: "DSO = (Average A/R Balance / Credit Sales) × Period Days (monthly)"
     },
     {
         title: "Budget Variance",
@@ -1045,6 +1045,27 @@ const solutionsKPIs = [
         formula: "Win% = (#Closed-Won / (#Closed-Won + #Closed-Lost)) × 100"
     },
     {
+        title: "Revenue Growth (YoY)",
+        value: 12,
+        target: "≥ 10%",
+        trend: "+1.5% quarterly",
+        type: "static",
+        color: "amber",
+        definition: "Year-over-year growth in recognized revenue.",
+        formula: "Growth% = (Revenue(t) − Revenue(t−12m)) / Revenue(t−12m) × 100"
+    },
+    {
+        title: "Actual vs Forecast Revenue",
+        type: "barLine",
+        color: "amber",
+        target: "Accuracy ≥ 95%",
+        definition: "Compares recognized revenue to forecast for same period to show variance and accuracy.",
+        formula: "Accuracy = 100 − ABS((Actual − Forecast) / Forecast × 100)",
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        actual: [90, 85, 100, 95, 105, 110],
+        forecast: [85, 90, 95, 100, 102, 108]
+    },
+    {
         title: "Average Discount",
         value: 12,
         target: "< 15%",
@@ -1056,16 +1077,7 @@ const solutionsKPIs = [
         labels: ["Product A", "Product B", "Product C", "Product D"],
         dataset: [25, 25, 25, 25]
     },
-    {
-        title: "Revenue Growth (YoY)",
-        value: 12,
-        target: "≥ 10%",
-        trend: "+1.5% quarterly",
-        type: "static",
-        color: "amber",
-        definition: "Year-over-year growth in recognized revenue.",
-        formula: "Growth% = (Revenue(t) − Revenue(t−12m)) / Revenue(t−12m) × 100"
-    },
+    
     {
         title: "Contact Rate per 1k users",
         value: 48,
@@ -1125,17 +1137,6 @@ const solutionsKPIs = [
         color: "emerald",
         definition: "Percent of active accounts with expansion bookings in period.",
         formula: "100 × (#Accounts with Expansion / #Active Accounts)"
-    },
-    {
-        title: "Actual vs Forecast Revenue",
-        type: "barLine",
-        color: "amber",
-        target: "Accuracy ≥ 95%",
-        definition: "Compares recognized revenue to forecast for same period to show variance and accuracy.",
-        formula: "Accuracy = 100 − ABS((Actual − Forecast) / Forecast × 100)",
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        actual: [90, 85, 100, 95, 105, 110],
-        forecast: [85, 90, 95, 100, 102, 108]
     }
 ];
 
